@@ -18,20 +18,20 @@
     <div class="search-all">
       <div class="search-input">
         <div class="search-item">
-          <span class="lab-name">事项名称</span>
-          <el-input class="event-name" placeholder="请输入事项名称"></el-input>
+          <span class="lab-name">房间号</span>
+          <el-input class="event-name" placeholder="请输入房间号"></el-input>
         </div>
 
         <div class="search-item">
-          <span class="lab-name">事项类型</span>
+          <span class="lab-name">房间类型</span>
           <el-select
             class="select"
-            v-model="value"
+            v-model="roomType"
             clearable
-            placeholder="请选择事项类型"
+            placeholder="请选择房间类型"
           >
             <el-option
-              v-for="item in downData"
+              v-for="item in roomTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -41,15 +41,15 @@
         </div>
 
         <div class="search-item">
-          <span class="lab-name">职权部门</span>
+          <span class="lab-name">楼层</span>
           <el-select
             class="select"
-            v-model="value"
+            v-model="roomFloor"
             clearable
-            placeholder="请选择职权部门"
+            placeholder="请选择楼层"
           >
             <el-option
-              v-for="item in downData"
+              v-for="item in roomFloorList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -60,12 +60,12 @@
 
         <el-button type="primary">查询</el-button>
         <div class="clear">清空条件</div>
-        <div class="updown" @click="changeDown">
+        <!-- <div class="updown" @click="changeDown">
           <div v-if="down">展开<i class="el-icon-arrow-down"></i></div>
           <div v-else>收起<i class="el-icon-arrow-up"></i></div>
-        </div>
+        </div> -->
       </div>
-      <div class="search-input searchs" v-if="!down">
+      <!-- <div class="search-input searchs" v-if="!down">
         <div class="search-item">
           <span class="lab-name">事项编码</span>
           <el-input placeholder="请输入事项编码"></el-input>
@@ -87,7 +87,7 @@
             </el-option>
           </el-select>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <el-button type="primary" icon="el-icon-plus" @click="addShow"
@@ -100,17 +100,22 @@
         :header-cell-style="{ background: '#FAFAFA' }"
       >
         <el-table-column prop="id" label="序号" width="80"> </el-table-column>
-        <el-table-column prop="name" label="事项名称" min-width="20%">
+        <el-table-column prop="name" label="房间号" min-width="20%">
         </el-table-column>
-        <el-table-column prop="department" min-width="10%" label="权职部门">
+        <el-table-column prop="department" min-width="10%" label="房间类型">
         </el-table-column>
-        <el-table-column prop="num" label="事项编码" width="120">
+        <el-table-column prop="num" label="房间楼层" width="120">
         </el-table-column>
-        <el-table-column prop="type" label="事项类型" width="80">
+        <el-table-column prop="hierarchy[0].label" label="是否已清洁" width="130">
         </el-table-column>
-        <el-table-column prop="hierarchy[0].label" label="实施层级" width="130">
-        </el-table-column>
-        <el-table-column prop="status" label="状态" width="80">
+        <el-table-column   label="状态" width="160">
+          <template slot-scope="scope">
+            <el-tag 
+              effect="dark" 
+              :type="scope.row.status?'danger':'success'">
+              {{+scope.row.status === 1 ? '出租中' : '空闲中'}}
+            </el-tag>
+          </template>
         </el-table-column>
         <el-table-column label="操作" width="220">
           <template slot-scope="scope">
@@ -143,7 +148,7 @@
     </div>
 
     <!-- 新增弹窗 -->
-    <el-dialog title="选择事项类型" width="510px" :visible.sync="addshow">
+    <!-- <el-dialog title="选择事项类型" width="510px" :visible.sync="addshow">
       <div class="dialog-type">
         <el-radio-group v-model="addRadio">
           <el-radio
@@ -159,14 +164,14 @@
         <el-button @click="addHidden">取 消</el-button>
         <el-button type="primary" @click="addHidden">确 定</el-button>
       </div>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 
 <script>
 import { openLoad, changStyle } from "../../assets/commonJs/until";
 import { indexAjax,verifyCodeAjax,usersAjax } from '../../assets/ajax/ajax' //一个个导入 （推荐）
-import * as requestApi from '../../assets/ajax/ajax' // 那他作为一个整体全部导入命名为 requestApi
+// import * as requestApi from '../../assets/ajax/ajax' // 那他作为一个整体全部导入命名为 requestApi
 
 export default {
   data() {
@@ -178,22 +183,34 @@ export default {
         pageSizes:[10,20,30,50]
       },
       tabItem: [ //状态的列表
-        { name: "待提交", num: 610, active:true },
-        { name: "已提交", num: 60, active:false },
+        { name: "待出租", num: 610, active:true },
+        { name: "出租中", num: 60, active:false },
         { name: "所有", num: 670, active:false },
       ],
-      downData: [ // 下拉的列表
+      roomType: '',
+      roomTypeList: [ // 下拉的列表
         {
-          value: "选项1",
-          label: "行政处罚",
+          value: "1",
+          label: "一房一厅",
         },
         {
-          value: "选项2",
-          label: "军事处罚",
+          value: "2",
+          label: "单间",
+        }
+      ],
+      roomFloor: '',
+      roomFloorList: [ // 下拉的列表
+        {
+          value: "1",
+          label: "2楼",
         },
         {
-          value: "选项3",
-          label: "刑事拘留",
+          value: "2",
+          label: "3楼",
+        },
+        {
+          value: "2",
+          label: "4楼",
         }
       ],
       checkboxList: [ //新增按钮的选项
@@ -206,58 +223,12 @@ export default {
       tableData: [ //表格的数据
         {
           id: 1,
-          name: "对自然保护区管理的监督检查",
-          department: "工业和信息化",
-          num: "440684",
-          type: "行政检查",
-          hierarchy: [{ label: "省级", value: 0 }],
-          status: "待提交",
-        },
-        {
-          id: 2,
-          name: "对自然保护区管理的监督检查",
-          department: "工业和信息化",
-          num: "440684",
-          type: "行政检查",
-          hierarchy: [{ label: "省级", value: 0 }],
-          status: "待提交",
-        },
-        {
-          id: 3,
-          name: "对自然保护区管理的监督检查",
-          department: "工业和信息化",
-          num: "440684",
-          type: "行政检查",
-          hierarchy: [{ label: "省级", value: 0 }],
-          status: "待提交",
-        },
-        {
-          id: 4,
-          name: "对自然保护区管理的监督检查",
-          department: "工业和信息化",
-          num: "440684",
-          type: "行政检查",
-          hierarchy: [{ label: "省级", value: 0 }],
-          status: "待提交",
-        },
-        {
-          id: 5,
-          name: "对自然保护区管理的监督检查",
-          department: "工业和信息化",
-          num: "440684",
-          type: "行政检查",
-          hierarchy: [{ label: "省级", value: 0 }],
-          status: "待提交",
-        },
-        {
-          id: 6,
-          name: "对自然保护区管理的监督检查",
-          department: "工业和信息化",
-          num: "440684",
-          type: "行政检查",
-          hierarchy: [{ label: "省级", value: 0 }],
-          status: "待提交",
-        },
+          name: "203",
+          department: "一房一厅",
+          num: "2楼",
+          hierarchy: [{ label: "是", value: 0 }],
+          status: "1",
+        }
       ],
       addshow: false, // 新增按钮的显示隐藏
     };

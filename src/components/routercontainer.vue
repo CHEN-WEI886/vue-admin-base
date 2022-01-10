@@ -1,5 +1,6 @@
 <template>
   <div class="container" :style="`height: ${availHeight}px;`">
+    <md-header></md-header>
     <div class="scrollbar-nav" v-if="showNav">
       <md-nav></md-nav>
     </div>
@@ -15,10 +16,12 @@
 
 <script>
 import Nav from "../components/nav.vue";
+import Header from "./header.vue";
 
 export default {
   components: {
     "md-nav": Nav,
+    "md-header": Header,
   },
   data() {
     return {

@@ -1,6 +1,5 @@
 <template>
   <div id="app" v-loading.fullscreen.lock="$store.state.loadShow">
-    <md-header></md-header>
     <div>
       <keep-alive>
         <router-view />
@@ -10,14 +9,16 @@
 </template>
 
 <script>
-import Header from "./components/header.vue";
 export default {
   name: "App",
-  components: {
-    "md-header": Header,
-  },
   data() {
-    return {};
+    return {
+      isLogin: '', // 是否登录
+    };
+  },
+  mounted(){
+    // console.log(this.$route)
+    // this.isLogin = this.$route.name
   },
   created() {},
   methods: {},

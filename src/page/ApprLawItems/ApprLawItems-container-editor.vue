@@ -1,22 +1,22 @@
 <template>
-  <div class="editor center-nonav-content">
+  <div class="editor center-nonav-content" ref="capture">
     <div class="infor">
-      <h1>新增通用事项</h1>
+      <h1>新增房间</h1>
       <div class="title" ref="infor" id="infor">基本信息</div>
       <div></div>
       <div class="content-item">
-        <label class="label-title">事项名称</label>
+        <label class="label-title">房间号</label>
         <el-input
           v-model="formInfor.name"
-          placeholder="请输入事项名称"
+          placeholder="请输入房间号"
           :disabled="true"
         ></el-input>
       </div>
 
       <div class="downgroud">
         <div class="content-down">
-          <label class="label-title">事项类型</label>
-          <el-select v-model="formInfor.type" disabled placeholder="请选择">
+          <label class="label-title">房间类型</label>
+          <el-select v-model="formInfor.type" disabled placeholder="请选择房间类型">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -28,16 +28,16 @@
         </div>
 
         <div class="content-down">
-          <label class="label-title">事项编码</label>
+          <label class="label-title">房间楼层</label>
           <el-input
             v-model="formInfor.num"
-            placeholder="请输入事项编码"
+            placeholder="请选择房间类型"
             :disabled="true"
           ></el-input>
         </div>
 
         <div class="content-down">
-          <label class="label-title">职权部门 <span>*</span> </label>
+          <label class="label-title">是否已清洁 <span>*</span> </label>
           <el-select
             v-model="formInfor.department"
             :disabled="type"
@@ -72,24 +72,12 @@
         </div>
 
         <div class="content-down">
-          <label class="label-title">检查种类 <span>*</span> </label>
+          <label class="label-title">状态 <span>*</span> </label>
           <el-select
             v-model="formInfor.type"
             :disabled="type"
             placeholder="请选择"
           >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </div>
-        <div class="content-down">
-          <label class="label-title">是否双随机检查 <span>*</span> </label>
-          <el-select v-model="value" :disabled="type" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -158,6 +146,7 @@
     </div>
 
     <div class="footer">
+      <el-button type="primary" @click="capyt">截图</el-button>
       <el-button type="primary">关闭</el-button>
       <el-button type="primary">保存</el-button>
       <el-button type="primary">提价</el-button>
@@ -317,6 +306,7 @@ import {
   initRightNav,
   changStyle,
 } from "../../assets/commonJs/until";
+import html2canvas from "html2canvas";
 export default {
   data() {
     return {
@@ -505,6 +495,7 @@ export default {
     openLoad();
   },
   mounted() {
+
     console.log('parent>>',parent.store)
     initRightNav(this.rightNav);
     this.esitChang();
@@ -518,6 +509,13 @@ export default {
     );
   },
   methods: {
+    capyt(){
+      console.log(111,this.$refs.capyt)
+      html2canvas(this.$refs.capyt).then(canvas => {
+        console.log(canvas)
+          // document.body.appendChild(canvas)
+      });
+    },
     caseDownFun() {
       this.caseDown = !caseDown;
     },
@@ -550,7 +548,11 @@ export default {
       // console.log(111,row)
     },
     goback() {
-      this.$router.go(-1);
+      let i = 0
+      console.log(this.$route.name)
+      // this.$router.replace({name: this.$route.name, query: {type:  +i}});
+
+      // this.$router.go(-1);
       // this.$router.push({ name:'redirect', query:{ type:'back' }});
     },
 

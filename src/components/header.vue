@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <div class="left" title="广东省行政执法监督网络平台">
-      广东省行政执法监督网络平台
+    <div class="left" title="广东省华荣公寓出租管理系统">
+      广东省华荣公寓出租管理系统
     </div>
     <el-scrollbar class="el-scrollbar-nav">
       <ul class="scroll">
@@ -43,17 +43,17 @@ export default {
   data() {
     return {
       name: "陈炜",
-      role: "广东政法厅",
+      role: "系统管理员",
       inforShow: false, //头像下拉框
       headerList: [
-        { name: "执法事项库", active: true, path: "/ApprLawItems" },
-        { name: "法律法规库", active: false, path: "/Law" },
-        { name: "案卷评查", active: false, path: "/Survey" },
-        { name: "统计分析", active: false, path: "/#" },
-        { name: "执法队伍", active: false, path: "/#" },
-        { name: "案件调阅", active: false, path: "/#" },
-        { name: "监督台", active: false, path: "/#" },
-        { name: "统计报表", active: false, path: "/#" },
+        // { name: "租房首页", active: true, path: "/ApprLawItems" },
+        // { name: "法律法规库", active: false, path: "/Law" },
+        // { name: "案卷评查", active: false, path: "/Survey" },
+        // { name: "统计分析", active: false, path: "/#" },
+        // { name: "执法队伍", active: false, path: "/#" },
+        // { name: "案件调阅", active: false, path: "/#" },
+        // { name: "监督台", active: false, path: "/#" },
+        // { name: "统计报表", active: false, path: "/#" },
       ],
       headerActive: 0, // 头部路由高亮的索引
     };
@@ -98,7 +98,7 @@ export default {
      * @param clearflag 主要是哦按段是否是刷新情况下调用，还是点击时候调用，点击就要clear，刷新不用clear
      */
     change(index, clearflag) {
-      console.log("header");
+      // console.log("header");
       if (clearflag) sessionStorage.clear();
       sessionStorage.setItem("headerActive", index);
       this.headerList.forEach((item, indx) => {
