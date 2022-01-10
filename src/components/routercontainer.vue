@@ -60,6 +60,9 @@ export default {
   },
   mounted() {
     this.changeActive();
+    this.$router.replace({
+      name: this.$router.name,
+    })
   },
   methods: {
     changeActive() {

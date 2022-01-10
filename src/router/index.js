@@ -11,26 +11,38 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
+
+const login = (resolve) => require(["@/page/login.vue"], resolve);
+const routercontainer = (resolve) => require(["@/components/routercontainer"], resolve);
+const container = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-container"], resolve);
+const analysis = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-analysis"], resolve);
+const editor = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-container-editor"], resolve);
+
+
+
 const router = new Router({
   routes: [
-    { path: '/login', name: 'login', component: resolve => require(['@/page/login'], resolve) },
-    {
-      path: '/',
-      name: 'ApprLawItems',
-      keepAlive:false,
-      redirect: '/ApprLawItems-container',
-      component: resolve => require(['@/components/routercontainer'], resolve),
-      children: [
-        { path: '/ApprLawItems-container', name: 'ApprLawItems-container', component: resolve => require(['@/page/ApprLawItems/ApprLawItems-container'], resolve) },
-        { path: '/ApprLawItems-analysis', name: 'ApprLawItems-analysis', component: resolve => require(['@/page/ApprLawItems/ApprLawItems-analysis'], resolve) },
-        { path: '/ApprLawItems-container-editor', name: 'editor-noshowNav', component: resolve => require(['@/page/ApprLawItems/ApprLawItems-container-editor'], resolve) }
-        // 在父路由下面归为子路由，自动拼接到父路由下，会只渲染在第二个 router-view
-      ]
+    { path: '/login',
+      name: 'login', 
+      component: login 
+    },
+    { path: '/',
+      redirect: '/login'
     },
     {
-      path: '/ApprLawItems',
-      name: '',
-      redirect: '/ApprLawItems-container',
+      path: '/ApprLawItems-container',
+      name: 'ApprLawItems',
+      component: routercontainer,
+      children: [
+        { path: '/ApprLawItems-container', name: 'ApprLawItems-container', component: container },
+        { path: '/ApprLawItems-analysis', name: 'ApprLawItems-analysis', component: analysis },
+        { path: '/ApprLawItems-container-editor', name: 'editor-noshowNav', component: editor }
+        // 在父路由下面归为子路由，自动拼接到父路由下，会只渲染在第二个 router-view
+      ]
     },
 
     // {
@@ -53,20 +65,21 @@ const router = new Router({
     
   ]
 })
-// router.beforeEach(function(to, from, next) {
-//   switch (true) {
-//     case (to.name == 'ApprLawItems-container'):
-//       sessionStorage.setItem("headerActive",0)
-//       break;
 
-//     case (to.name == 'Law-library'):
-//       sessionStorage.setItem("headerActive",1)
-//     default:
-//       break;
-//   }
-//   // console.log("to=>",to)
-//   // console.log("from=>",from)
-//   next()
-// })
+
+
+router.beforeEach((to, from, next) => {
+  if (!sessionStorage.getItem("token") && to.name !== 'login' ) {
+    Vue.prototype.$message({
+      message: '请登录!',
+      type: 'warning'
+    });
+    setTimeout(()=>{
+      next({name:'login'})
+    },1000)
+  } else {
+  }
+  next();
+});
 
 export default router

@@ -42,7 +42,7 @@
 export default {
   data() {
     return {
-      name: "陈炜",
+      name: "华荣",
       role: "系统管理员",
       inforShow: false, //头像下拉框
       headerList: [

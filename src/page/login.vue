@@ -30,7 +30,7 @@ export default {
     window.addEventListener("resize", () => {
       this.getAvailHeight();
     });
-    localStorage.removeItem('token')
+    sessionStorage.removeItem('token')
   },
   methods: {
     getAvailHeight() {
@@ -38,7 +38,28 @@ export default {
       this.availHeight = document.documentElement.clientHeight;
     },
     confim(){
-      localStorage.setItem('token','esasdjiaisdjnxojks123n')
+      if(!this.userName || !this.password) {
+        this.$message({
+          message: '输入内容不能为空!',
+          type: 'warning'
+        });
+        return
+      }
+      if(this.userName !== 'hr') {
+        this.$message({
+          message: '用户名错误!',
+          type: 'warning'
+        });
+        return
+      }
+      if(this.password !== '13928518659') {
+        this.$message({
+          message: '密码错误!',
+          type: 'warning'
+        });
+        return
+      }
+      sessionStorage.setItem('token','esasdjiaisdjnxojks123n')
       this.$router.push({name: 'ApprLawItems'})
     }
   }
