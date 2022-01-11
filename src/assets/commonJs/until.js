@@ -102,8 +102,8 @@ export function changStyle(index, arr){
 
 //打开弹窗
 export function openLoad(){
-    setTimeout(() => {
-        mutations.openShow()
-    }, 500)
-    mutations.openShow()
+  mutations.openShow()
+}
+export function closeLoad(){
+  mutations.closeShow()
 }

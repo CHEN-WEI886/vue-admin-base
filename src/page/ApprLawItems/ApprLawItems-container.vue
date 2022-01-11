@@ -1,18 +1,16 @@
 <template>
-  <div
-    class="ApprLawItems-container center-content"
-  >
+  <div class="ApprLawItems-container center-content">
     <div class="tab">
-      <div 
-      class="tab-item" 
-      :class="item.active?'active':''" 
-      v-for="(item,index) in tabItem" 
-      :key="index" 
-      @click="changeTab(index)"
-      > 
-      {{item.name}} 
-      <span>{{item.num}}</span>
-    </div>
+      <div
+        class="tab-item"
+        :class="item.active ? 'active' : ''"
+        v-for="(item, index) in tabItem"
+        :key="index"
+        @click="changeTab(index)"
+      >
+        {{ item.name }}
+        <span>{{ item.num }}</span>
+      </div>
     </div>
 
     <div class="search-all">
@@ -60,34 +58,7 @@
 
         <el-button type="primary">查询</el-button>
         <div class="clear">清空条件</div>
-        <!-- <div class="updown" @click="changeDown">
-          <div v-if="down">展开<i class="el-icon-arrow-down"></i></div>
-          <div v-else>收起<i class="el-icon-arrow-up"></i></div>
-        </div> -->
       </div>
-      <!-- <div class="search-input searchs" v-if="!down">
-        <div class="search-item">
-          <span class="lab-name">事项编码</span>
-          <el-input placeholder="请输入事项编码"></el-input>
-        </div>
-        <div class="search-item">
-          <span class="lab-name">实施层级</span>
-          <el-select
-            class="select"
-            v-model="value"
-            clearable
-            placeholder="请选择实施层级"
-          >
-            <el-option
-              v-for="item in downData"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </div>
-      </div> -->
     </div>
 
     <el-button type="primary" icon="el-icon-plus" @click="addShow"
@@ -106,14 +77,19 @@
         </el-table-column>
         <el-table-column prop="num" label="房间楼层" width="120">
         </el-table-column>
-        <el-table-column prop="hierarchy[0].label" label="是否已清洁" width="130">
+        <el-table-column
+          prop="hierarchy[0].label"
+          label="是否已清洁"
+          width="130"
+        >
         </el-table-column>
-        <el-table-column   label="状态" width="160">
+        <el-table-column label="状态" width="160">
           <template slot-scope="scope">
-            <el-tag 
-              effect="dark" 
-              :type="scope.row.status?'danger':'success'">
-              {{+scope.row.status === 1 ? '出租中' : '空闲中'}}
+            <el-tag
+              effect="dark"
+              :type="scope.row.status ? 'danger' : 'success'"
+            >
+              {{ +scope.row.status === 1 ? "出租中" : "空闲中" }}
             </el-tag>
           </template>
         </el-table-column>
@@ -132,16 +108,18 @@
             >
               编辑</el-button
             >
-            <el-button type="text" size="mini" @click="deleteRow"> 删除</el-button>
+            <el-button type="text" size="mini" @click="deleteRow">
+              删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
 
       <div class="page">
         <next-page
-          :page='page'
-          @handleSizeChange='handleSizeChange' 
-          @handleCurrentChange='handleCurrentChange'
+          :page="page"
+          @handleSizeChange="handleSizeChange"
+          @handleCurrentChange="handleCurrentChange"
         >
         </next-page>
       </div>
@@ -169,8 +147,8 @@
 </template>
 
 <script>
-import { openLoad, changStyle } from "../../assets/commonJs/until";
-import { indexAjax,verifyCodeAjax,usersAjax } from '../../assets/ajax/ajax' //一个个导入 （推荐）
+import { openLoad, closeLoad, changStyle } from "../../assets/commonJs/until";
+import { indexAjax, verifyCodeAjax, usersAjax } from "../../assets/ajax/ajax"; //一个个导入 （推荐）
 // import * as requestApi from '../../assets/ajax/ajax' // 那他作为一个整体全部导入命名为 requestApi
 
 export default {
@@ -178,17 +156,20 @@ export default {
     return {
       down: true, // 展开收起的状态
       addRadio: "", // 新增弹窗的选中状态
-      page:{ // 分页传给组件的基本信息
-        total:40,
-        pageSizes:[10,20,30,50]
+      page: {
+        // 分页传给组件的基本信息
+        total: 40,
+        pageSizes: [10, 20, 30, 50],
       },
-      tabItem: [ //状态的列表
-        { name: "待出租", num: 610, active:true },
-        { name: "出租中", num: 60, active:false },
-        { name: "所有", num: 670, active:false },
+      tabItem: [
+        //状态的列表
+        { name: "待出租", num: 610, active: true },
+        { name: "出租中", num: 60, active: false },
+        { name: "所有", num: 670, active: false },
       ],
-      roomType: '',
-      roomTypeList: [ // 下拉的列表
+      roomType: "",
+      roomTypeList: [
+        // 下拉的列表
         {
           value: "1",
           label: "一房一厅",
@@ -196,10 +177,11 @@ export default {
         {
           value: "2",
           label: "单间",
-        }
+        },
       ],
-      roomFloor: '',
-      roomFloorList: [ // 下拉的列表
+      roomFloor: "",
+      roomFloorList: [
+        // 下拉的列表
         {
           value: "1",
           label: "2楼",
@@ -209,18 +191,20 @@ export default {
           label: "3楼",
         },
         {
-          value: "2",
+          value: "3",
           label: "4楼",
-        }
+        },
       ],
-      checkboxList: [ //新增按钮的选项
+      checkboxList: [
+        //新增按钮的选项
         { name: "行政处罚", active: false },
         { name: "行政处罚1", active: false },
         { name: "行政处罚2", active: false },
         { name: "行政处罚3", active: false },
       ],
       value: "", //下拉框的选中
-      tableData: [ //表格的数据
+      tableData: [
+        //表格的数据
         {
           id: 1,
           name: "203",
@@ -228,40 +212,46 @@ export default {
           num: "2楼",
           hierarchy: [{ label: "是", value: 0 }],
           status: "1",
-        }
+        },
       ],
       addshow: false, // 新增按钮的显示隐藏
     };
   },
   created() {
     //打开加载框
+    this.getInfor();
     openLoad();
-    this.getInfor()
+    setTimeout(() => {
+      closeLoad();
+    }, 500);
   },
   methods: {
-    async getInfor(){
+    async getInfor() {
       // let i = 0
       // let res = await i++
       // // console.log("res=>",this.getInfor())
-      usersAjax({},'get').then((res)=>{
-        console.log(res)
-      })
+      // usersAjax({},'get').then((res)=>{
+      //   console.log(res)
+      // })
     },
-    deleteRow(){ //删除列
+    deleteRow() {
+      //删除列
       this.$message({
-          message: '警告，别删除我!',
-          type: 'warning'
-        });
+        message: "警告，别删除我!",
+        type: "warning",
+      });
     },
-    addShow(){ // 新增弹窗的出现
-      this.addshow = true
+    addShow() {
+      // 新增弹窗的出现
+      this.addshow = true;
     },
-    addHidden(){
-      this.addshow = false
+    addHidden() {
+      this.addshow = false;
     },
-    changeTab(index){
-      changStyle(index,this.tabItem)
+    changeTab(index) {
+      changStyle(index, this.tabItem);
       openLoad();
+      closeLoad();
     },
     changeDown() {
       this.down = !this.down;
@@ -269,7 +259,7 @@ export default {
     /**
      * @param type 判断是编辑模式还是查看模式
      * @param row 点击这一列的数据
-    */
+     */
     handleClick(type, row) {
       this.$router.push({
         name: "editor-noshowNav",
@@ -280,13 +270,13 @@ export default {
 
     /**
      * 接受子组件传过来的页数
-    */
+     */
     handleSizeChange(val) {
-      console.log('下一页调用接口',val);
+      console.log("下一页调用接口", val);
     },
     handleCurrentChange(val) {
-      console.log('跳转某一页调用接口',val);
-    }
+      console.log("跳转某一页调用接口", val);
+    },
   },
 };
 </script>

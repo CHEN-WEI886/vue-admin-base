@@ -9,15 +9,11 @@ let apprLawItemsRouter = [
             id: '1-1',
             path: 'ApprLawItems-container',
         }
-        // , {
-        //     name: '事项审核',
-        //     id: '1-2',
-        //     path: 'ApprLawItems-container1',
-        // }, {
-        //     name: '事项发布',
-        //     id: '1-3',
-        //     path: 'ApprLawItems-container2',
-        // }
+        , {
+            name: '房间密码',
+            id: '1-2',
+            path: 'room-password',
+        }
     ]
     }, 
     // {

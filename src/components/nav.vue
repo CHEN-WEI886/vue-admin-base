@@ -63,25 +63,17 @@ export default {
       this.routerName = this.$route.name.split("-")[0];
 
       //暂时写2个判断，多的封装成方法循环判断
-      if (this.routerName == "ApprLawItems") {
-        this.routerMenu = apprLawItemsRouter;
-      } else if (this.routerName == "Law") {
-        this.routerMenu = lowItemRouter;
-      }
+      this.routerMenu = apprLawItemsRouter;
       this.changeTab();
     },
 
     changeTab() {
       //这一层判断是为了防止header清除sessionStorage里面的activeMenu过慢导致还能拿到activeMenu里面的值，误判头部导航栏切换是对其他进行印象
       if (
-        sessionStorage.getItem("activeMenu") &&
-        sessionStorage.getItem("activeMenu").split("-")[0] != this.routerName
+        !sessionStorage.getItem("activeMenu")
       ) {
-        console.log("进来了");
-        this.activeMenu =
-          this.routerMenu[0].path || this.routerMenu[0].children[0].path;
+        this.activeMenu = this.routerMenu[0].path || this.routerMenu[0].children[0].path;
       } else {
-        // console.log(111,this.routerMenu[0].path)
         this.activeMenu =
           sessionStorage.getItem("activeMenu") ||
           this.routerMenu[0].path ||

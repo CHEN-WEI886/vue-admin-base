@@ -11,9 +11,9 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const originalPush = Router.prototype.push;
-Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
+const originalreplace = Router.prototype.replace;;
+Router.prototype.replace = function replace(location) {
+  return originalreplace.call(this, location).catch(err => err)
 }
 
 const login = (resolve) => require(["@/page/login.vue"], resolve);
@@ -21,7 +21,7 @@ const routercontainer = (resolve) => require(["@/components/routercontainer"], r
 const container = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-container"], resolve);
 const analysis = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-analysis"], resolve);
 const editor = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-container-editor"], resolve);
-
+const roomPassword = (resolve) => require(["@/page/ApprLawItems/room-password"], resolve);
 
 
 const router = new Router({
@@ -40,7 +40,8 @@ const router = new Router({
       children: [
         { path: '/ApprLawItems-container', name: 'ApprLawItems-container', component: container },
         { path: '/ApprLawItems-analysis', name: 'ApprLawItems-analysis', component: analysis },
-        { path: '/ApprLawItems-container-editor', name: 'editor-noshowNav', component: editor }
+        { path: '/ApprLawItems-container-editor', name: 'editor-noshowNav', component: editor },
+        { path: '/room-password', name: 'roomPassword', component: roomPassword }
         // 在父路由下面归为子路由，自动拼接到父路由下，会只渲染在第二个 router-view
       ]
     },
