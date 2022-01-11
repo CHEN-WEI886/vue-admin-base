@@ -37,28 +37,10 @@
         </div>
 
         <div class="content-down">
-          <label class="label-title">是否已清洁 <span>*</span> </label>
+          <label class="label-title">是否已清洁<span>*</span> </label>
           <el-select
             v-model="formInfor.department"
             :disabled="type"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </div>
-
-        <div class="content-down">
-          <label class="label-title">实施层级 <span>*</span> </label>
-          <el-select
-            multiple
-            :disabled="type"
-            v-model="formInfor.hierarchy"
             placeholder="请选择"
           >
             <el-option
@@ -89,42 +71,10 @@
         </div>
       </div>
 
-      <div class="title" ref="case" id="case">设立依据</div>
+      <div class="title" ref="case" id="case">房间设施</div>
 
-      <div class="title" ref="case1" id="case1">设定依据</div>
-      <div v-if="!type">
-        <el-button type="primary" icon="el-icon-plus" @click="lowShow = true"
-          >关联法律法规</el-button
-        >
-      </div>
+      <div class="title" ref="case1" id="case1">房间照片</div>
 
-      <div class="title" ref="photo" id="photo">电子证照</div>
-
-      <div v-if="!type">
-        <el-button type="primary" icon="el-icon-plus" @click="photoShow = true"
-          >关联电子照</el-button
-        >
-        <el-table
-          :data="photoSelection"
-          border
-          style="width: 100%; margin-top: 20px"
-          :header-cell-style="{ background: '#FAFAFA' }"
-        >
-          <el-table-column prop="date" label="证件名称" width="380">
-          </el-table-column>
-          <el-table-column prop="name" label="目录基本码" width="300">
-          </el-table-column>
-          <el-table-column prop="address" label="行业部门" width="295">
-          </el-table-column>
-          <el-table-column prop="address" label="操作" min-width="20%">
-            <template slot-scope="scope">
-              <el-button @click="handleClick(scope)" type="text" size="mini"
-                >删除</el-button
-              >
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
     </div>
 
     <!-- 后期抽出来作为组件 -->
@@ -146,156 +96,9 @@
     </div>
 
     <div class="footer">
-      <el-button type="primary" @click="capyt">截图</el-button>
       <el-button type="primary">关闭</el-button>
       <el-button type="primary">保存</el-button>
-      <el-button type="primary">提价</el-button>
     </div>
-
-    <!-- low弹窗 -->
-    <el-dialog
-      class="low-dialog"
-      title="新增违法行为依据"
-      :visible.sync="lowShow"
-      width="74%"
-    >
-      <div class="search">
-        <div class="search-item">
-          证照名称 <el-input placeholder="请输入内容"></el-input>
-        </div>
-        <div class="search-item">
-          目录基本码 <el-input placeholder="请输入内容"></el-input>
-        </div>
-
-        <el-button type="primary">查询</el-button>
-        <div class="clear">清空条件</div>
-      </div>
-
-      <div class="dialog-body">
-        <div class="left">
-          <div class="title">
-            <el-input placeholder="请输入内容"></el-input>
-            <el-button type="info" plain>搜索</el-button>
-          </div>
-          <div>
-            <el-tree
-              :data="lowTree"
-              :props="defaultProps"
-              @node-click="handleNodeClick"
-            ></el-tree>
-          </div>
-        </div>
-        <div class="mid">
-          <div class="title">
-            <el-input placeholder="请输入内容"></el-input>
-            <el-button type="info" plain>搜索</el-button>
-            <div class="case" @click="caseDownFun">
-              参考依据
-              <i v-if="caseDown" class="el-icon-arrow-down"></i>
-              <i v-else class="el-icon-arrow-up"></i>
-            </div>
-          </div>
-          <div v-if="caseDown" class="caseContent">
-            <p>暂无内容</p>
-          </div>
-        </div>
-        <div class="right">
-          <div class="title">
-            已选中
-            <i
-              class="el-icon-delete clear-btn"
-              @click="clearlowSelection()"
-            ></i>
-          </div>
-          <ul class="right-body">
-            <li
-              class="right-item"
-              v-for="(item, index) in lowSelection"
-              :key="index"
-            >
-              {{ item.label }}
-              <!-- <i
-                class="el-icon-circle-close"
-                @click="toggleSelection([photoData[item.id]])"
-              ></i> -->
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="d-footer">
-        <el-button type="danger" @click="lowShow = false">取消</el-button>
-        <el-button type="primary" @click="sure">确定</el-button>
-      </div>
-    </el-dialog>
-
-    <!-- 电子照弹窗 -->
-    <el-dialog class="dialog" title="关联电子照" :visible.sync="photoShow">
-      <div class="search">
-        <div class="search-item">
-          证照名称 <el-input placeholder="请输入内容"></el-input>
-        </div>
-        <div class="search-item">
-          目录基本码 <el-input placeholder="请输入内容"></el-input>
-        </div>
-
-        <el-button type="primary">查询</el-button>
-        <div class="clear">清空条件</div>
-      </div>
-
-      <div class="dialog-body">
-        <el-table
-          ref="multipleTable"
-          :data="photoData"
-          tooltip-effect="dark"
-          border
-          v-infinite-scroll="load"
-          height="250"
-          style="margin-top: 20px; overflow: auto"
-          :header-cell-style="{ background: '#FAFAFA' }"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column type="selection" width="55"> </el-table-column>
-          <el-table-column label="证件名称" width="283">
-            <template slot-scope="scope">{{ scope.row.date }}</template>
-          </el-table-column>
-          <el-table-column prop="name" label="目录基本码" width="120">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="行业部门"
-            show-overflow-tooltip
-            width="180"
-          >
-          </el-table-column>
-        </el-table>
-
-        <div class="right">
-          <div class="title">
-            已选中
-            <i class="el-icon-delete clear-btn" @click="toggleSelection()"></i>
-          </div>
-          <ul class="right-body">
-            <li
-              class="right-item"
-              v-for="(item, index) in multipleSelection"
-              :key="index"
-            >
-              {{ item.date }}
-              <i
-                class="el-icon-circle-close"
-                @click="toggleSelection([photoData[item.id]])"
-              ></i>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="d-footer">
-        <el-button type="danger" @click="photoShow = false">取消</el-button>
-        <el-button type="primary" @click="sure">确定</el-button>
-      </div>
-    </el-dialog>
   </div>
 </template>
 
@@ -378,10 +181,10 @@ export default {
       rightNav: [
         //右边侧边栏的信息 ，多的时候可以封装起来
         { name: "基本信息", active: true, target: "infor", offsetTop: 0 },
-        { name: "设立依据", active: false, target: "case", offsetTop: 0 },
-        { name: "设立依据", active: false, target: "case1", offsetTop: 0 },
-        { name: "电子证件", active: false, target: "photo", offsetTop: 0 },
+        { name: "房间设施", active: false, target: "case", offsetTop: 0 },
+        { name: "房间照片", active: false, target: "case1", offsetTop: 0 },
       ],
+      type: this.$router.query.type || 0,
       formInfor: {}, //传进来的数据
       options: [
         // 层级，部门下拉框统一，没有做过多操作
@@ -399,85 +202,6 @@ export default {
         },
       ],
       value: "", // 输入框的值，没有分开做，简单的写上来做展示
-      photoSelection: [], // 选中的电子照片的数据
-      photoData: [
-        // 电子照片的数据
-        {
-          date: "不动产登记结果信息表（产权）1",
-          name: "200278201",
-          id: 0,
-        },
-        {
-          date: "不动产登记结果信息表（产权）2",
-          name: "200278201",
-          id: 1,
-        },
-        {
-          date: "不动产登记结果信息表（产权3）",
-          name: "200278201",
-          id: 2,
-        },
-        {
-          date: "不动产登记结果信息表（产权）4",
-          name: "200278201",
-          id: 3,
-        },
-        {
-          date: "不动产登记结果信息表（产权）5",
-          name: "200278201",
-          id: 4,
-        },
-        {
-          date: "不动产登记结果信息表（产权）6",
-          name: "200278201",
-          id: 5,
-        },
-        {
-          date: "不动产登记结果信息表（产权）7",
-          name: "200278201",
-          id: 6,
-        },
-        {
-          date: "不动产登记结果信息表（产权）8",
-          name: "200278201",
-          id: 7,
-        },
-        {
-          date: "不动产登记结果信息表（产权）9",
-          name: "200278201",
-          id: 8,
-        },
-        {
-          date: "不动产登记结果信息表（产权）10",
-          name: "200278201",
-          id: 9,
-        },
-        {
-          date: "不动产登记结果信息表（产权）11",
-          name: "200278201",
-          id: 10,
-        },
-        {
-          date: "不动产登记结果信息表（产权）12",
-          name: "200278201",
-          id: 11,
-        },
-        {
-          date: "不动产登记结果信息表（产权）13",
-          name: "200278201",
-          id: 12,
-        },
-        {
-          date: "不动产登记结果信息表（产权）14",
-          name: "200278201",
-          id: 13,
-        },
-        {
-          date: "不动产登记结果信息表（产权）15",
-          name: "200278201",
-          id: 14,
-        },
-      ],
       photoShow: false, // photo弹窗的展示与否
       lowShow: false, // law弹窗的展示与否
       count: 0, // 上滚加载的页数
@@ -509,13 +233,6 @@ export default {
     );
   },
   methods: {
-    capyt(){
-      console.log(111,this.$refs.capyt)
-      html2canvas(this.$refs.capyt).then(canvas => {
-        console.log(canvas)
-          // document.body.appendChild(canvas)
-      });
-    },
     caseDownFun() {
       this.caseDown = !caseDown;
     },
@@ -526,6 +243,7 @@ export default {
     },
 
     esitChang() {
+      console.log(this.activeDistance)
       //判断滚动条滚动的距离是在数组的那个范围里
       this.activeDistance = this.$store.state.activeDistance;
       this.rightNav.forEach((item, index) => {

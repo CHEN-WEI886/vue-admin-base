@@ -30,8 +30,8 @@
 
         <div class="down" :style="inforShow ? 'display:flex' : 'display:none'">
           <span class="san"></span>
-          <div class="person_infor">个人资料</div>
-          <div class="quit">退出登录</div>
+          <!-- <div class="person_infor">个人资料</div> -->
+          <div class="quit" @click="quit">退出登录</div>
         </div>
       </div>
     </div>
@@ -109,6 +109,17 @@ export default {
         }
       });
     },
+    quit() {
+      sessionStorage.clear()
+      this.inforShow = false
+      this.$message({
+        message: '退出成功!',
+        type: 'success'
+      })
+      setTimeout(()=>{
+        this.$router.replace({name:'login'})
+      },1000)
+    }
   },
 };
 </script>

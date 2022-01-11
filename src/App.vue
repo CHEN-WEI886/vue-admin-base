@@ -1,9 +1,7 @@
 <template>
   <div id="app" v-loading.fullscreen.lock="$store.state.loadShow">
     <div>
-      <keep-alive>
-        <router-view />
-      </keep-alive>
+      <router-view />
     </div>
   </div>
 </template>

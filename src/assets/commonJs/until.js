@@ -65,6 +65,7 @@ export function jump(domId){
 *@param arr 传进来的数组对象
 */
 export function initRightNav(arr){
+  if(!Array.isArray(arr)) return
     arr.forEach(item=>{
       item.offsetTop = document.getElementById(item.target).offsetTop - 66
     })
