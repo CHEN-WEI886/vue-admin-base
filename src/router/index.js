@@ -22,6 +22,7 @@ const container = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-contai
 const analysis = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-analysis"], resolve);
 const editor = (resolve) => require(["@/page/ApprLawItems/ApprLawItems-container-editor"], resolve);
 const roomPassword = (resolve) => require(["@/page/ApprLawItems/room-password"], resolve);
+const orderList = (resolve) => require(["@/page/ApprLawItems/order-list"], resolve);
 
 
 const router = new Router({
@@ -41,7 +42,8 @@ const router = new Router({
         { path: '/ApprLawItems-container', name: 'ApprLawItems-container', component: container },
         { path: '/ApprLawItems-analysis', name: 'ApprLawItems-analysis', component: analysis },
         { path: '/ApprLawItems-container-editor', name: 'editor-noshowNav', component: editor },
-        { path: '/room-password', name: 'roomPassword', component: roomPassword }
+        { path: '/room-password', name: 'roomPassword', component: roomPassword },
+        { path: '/order-list', name: 'orderList', component: orderList }
         // 在父路由下面归为子路由，自动拼接到父路由下，会只渲染在第二个 router-view
       ]
     },

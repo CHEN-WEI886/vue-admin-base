@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import { openLoad, closeLoad, changStyle } from "../../assets/commonJs/until";
+import { openLoad, closeLoad, changStyle } from "@/assets/commonJs/until.js";
 import { indexAjax, verifyCodeAjax, usersAjax } from "../../assets/ajax/ajax"; //一个个导入 （推荐）
 // import * as requestApi from '../../assets/ajax/ajax' // 那他作为一个整体全部导入命名为 requestApi
 

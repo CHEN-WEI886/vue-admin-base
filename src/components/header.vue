@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import { openLoad, closeLoad, changStyle } from "@/assets/commonJs/until.js";
+
 export default {
   data() {
     return {
@@ -116,6 +118,10 @@ export default {
         message: '退出成功!',
         type: 'success'
       })
+      openLoad();
+      setTimeout(() => {
+        closeLoad();
+      }, 500);
       setTimeout(()=>{
         this.$router.replace({name:'login'})
       },1000)

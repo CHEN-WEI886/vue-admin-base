@@ -17,9 +17,9 @@
       :header-cell-style="{ background: '#FAFAFA' }"
     >
       <el-table-column prop="id" label="序号" width="80"> </el-table-column>
-      <el-table-column prop="name" label="房间号" width="200">
+      <el-table-column prop="orderNumber" label="订单号" min-width="20%">
       </el-table-column>
-      <el-table-column prop="hierarchy[0].label" label="是否已清洁" width="130">
+      <el-table-column prop="name" label="房间号" width="200">
       </el-table-column>
       <el-table-column label="状态" width="160">
         <template slot-scope="scope">
@@ -27,48 +27,19 @@
             effect="dark"
             :type="+scope.row.status === 1 ? 'danger' : 'success'"
           >
-            {{ +scope.row.status === 1 ? "出租中" : "空闲中" }}
+            {{ +scope.row.status === 1 ? "进行中" : "已完成" }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="password" label="密码" min-width="20%">
-      </el-table-column>
-      <el-table-column label="操作" width="320">
+      <el-table-column label="操作" width="220">
         <template slot-scope="scope">
           <el-button type="text" size="mini" @click="handleClick(scope.row)">
-            修改密码</el-button
-          >
-          <el-button type="text" size="mini" @click="updataRoom(scope.row)">
-            修改房间状态</el-button
+            查看用户资料</el-button
           >
         </template>
       </el-table-column>
     </el-table>
-    <v-dialog ref="dialog" title="修改密码" @confim="save">
-      <el-input
-        v-if="+type === 1"
-        v-model="password"
-        placeholder="请输入新密码"
-        clearable
-      ></el-input>
-      <div class="search-item" v-if="+type === 2">
-        <span class="lab-name mr10">房间类型</span>
-        <el-select
-          class="select"
-          v-model="roomStatus"
-          clearable
-          placeholder="请选择修改的状态"
-        >
-          <el-option
-            v-for="item in statusList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </div>
-    </v-dialog>
+
     <div class="page">
       <next-page
         :page="page"
@@ -77,15 +48,25 @@
       >
       </next-page>
     </div>
+    <v-dialog 
+      ref="dialog"
+      width='50%'
+      title='住户信息'
+      cancelText='关闭'
+      :isConfim='false'
+      @confim='save'
+      >
+    </v-dialog>
   </div>
 </template>
 
 <script>
-import { openLoad, closeLoad, changStyle } from "@/assets/commonJs/until.js";
+import { openLoad, closeLoad, changStyle } from "../../assets/commonJs/until";
 import dialog from "@/components/dialog.vue";
+
 export default {
-  components: {
-    "v-dialog": dialog,
+  components:{
+    'v-dialog':dialog
   },
   data() {
     return {
@@ -96,27 +77,13 @@ export default {
       },
       password: "",
       openDialog: false,
-      statusList: [
-        {
-          value: "1",
-          label: "出租中",
-        },
-        {
-          value: "2",
-          label: "空闲中",
-        },
-        {
-          value: "3",
-          label: "维修中",
-        },
-      ],
-      roomStatus: "",
       tableData: [
         //表格的数据
         {
           id: 1,
           name: "203",
           department: "一房一厅",
+          orderNumber:'ebcionjmsojppsw12sf8',
           num: "2楼",
           password: "123456",
           hierarchy: [{ label: "是", value: 0 }],
@@ -126,13 +93,13 @@ export default {
           id: 2,
           name: "203",
           department: "单间",
+          orderNumber:'ebcionjmsojppsw12sf8',
           num: "2楼",
           password: "123456",
           hierarchy: [{ label: "是", value: 0 }],
           status: "0",
         },
       ],
-      type: 1, //1是修改密码，2是修改房间状态
     };
   },
   created() {
@@ -143,26 +110,14 @@ export default {
   },
   methods: {
     save() {
-      console.log("进来了");
+      this.openDialog = false;
     },
-    updataRoom() {
-      this.type = 2;
-      this.$refs.dialog.openDialog();
-    },
+    handleClose() {},
     /**
      * @param row 点击这一列的数据
      */
     handleClick(row) {
-      if (+row.status === 1) {
-        this.$message({
-          message: "出租中不能修改密码!",
-          type: "warning",
-        });
-        return;
-      }
-      this.type = 1;
-      this.$refs.dialog.openDialog();
-      this.password = row.password;
+      this.$refs.dialog.openDialog()
     },
     /**
      * 接受子组件传过来的页数
@@ -191,7 +146,10 @@ export default {
       .el-input.main-name-input {
         width: 300px;
       }
-
+      .lab-name {
+        white-space: nowrap;
+        margin-right: 14px;
+      }
       .search-item {
         display: flex;
         align-items: center;

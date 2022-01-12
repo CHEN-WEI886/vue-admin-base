@@ -8,11 +8,14 @@ let apprLawItemsRouter = [
             name: '房间列表',
             id: '1-1',
             path: 'ApprLawItems-container',
-        }
-        , {
-            name: '房间密码',
+        },{
+            name: '修改房间信息',
             id: '1-2',
             path: 'room-password',
+        },{
+            name: '订单记录',
+            id: '1-3',
+            path: 'order-list',
         }
     ]
     }, 

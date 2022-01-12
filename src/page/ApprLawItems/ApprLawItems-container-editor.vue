@@ -219,8 +219,6 @@ export default {
     openLoad();
   },
   mounted() {
-
-    console.log('parent>>',parent.store)
     initRightNav(this.rightNav);
     this.esitChang();
     window.addEventListener("scroll",() => {
