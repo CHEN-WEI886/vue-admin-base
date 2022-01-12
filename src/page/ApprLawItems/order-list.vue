@@ -48,14 +48,39 @@
       >
       </next-page>
     </div>
-    <v-dialog 
+    <v-dialog
       ref="dialog"
-      width='50%'
-      title='住户信息'
-      cancelText='关闭'
-      :isConfim='false'
-      @confim='save'
-      >
+      width="50%"
+      title="住户信息"
+      cancelText="关闭"
+      :isConfim="false"
+      @confim="save"
+      class="dialog"
+    >
+      <div class="item">
+        <span>姓名: </span> <div>{{info.name}}</div>
+      </div>
+      <div class="item">
+        <span>身份证: </span> <div>{{info.idCode}}</div>
+      </div>
+      <div class="item">
+        <span>手机号: </span> <div>{{info.mobilePhone}}</div>
+      </div>
+      <div class="item">
+        <span>证件照片: </span> 
+        <div class="demo-image__preview">
+        <el-image
+          v-for="item in info.idImge"
+          :key="item"
+          style="width: 100px; height: 100px"
+          class="mr10"
+          :src="info.idImge[0]"
+          :preview-src-list="info.idImge"
+        >
+        </el-image>
+      </div>
+      </div>
+      
     </v-dialog>
   </div>
 </template>
@@ -65,8 +90,8 @@ import { openLoad, closeLoad, changStyle } from "../../assets/commonJs/until";
 import dialog from "@/components/dialog.vue";
 
 export default {
-  components:{
-    'v-dialog':dialog
+  components: {
+    "v-dialog": dialog,
   },
   data() {
     return {
@@ -83,7 +108,7 @@ export default {
           id: 1,
           name: "203",
           department: "一房一厅",
-          orderNumber:'ebcionjmsojppsw12sf8',
+          orderNumber: "ebcionjmsojppsw12sf8",
           num: "2楼",
           password: "123456",
           hierarchy: [{ label: "是", value: 0 }],
@@ -93,20 +118,26 @@ export default {
           id: 2,
           name: "203",
           department: "单间",
-          orderNumber:'ebcionjmsojppsw12sf8',
+          orderNumber: "ebcionjmsojppsw12sf8",
           num: "2楼",
           password: "123456",
           hierarchy: [{ label: "是", value: 0 }],
           status: "0",
         },
       ],
+      info:{
+        name: '陈炜',
+        idCode: '440684199712276914',
+        mobilePhone: '13266339279',
+        idImge: [
+        "https://fuss10.elemecdn.com/8/27/f01c15bb73e1ef3793e64e6b7bbccjpeg.jpeg",
+        "https://fuss10.elemecdn.com/1/8e/aeffeb4de74e2fde4bd74fc7b4486jpeg.jpeg",
+      ],
+      },
     };
   },
   created() {
-    openLoad();
-    setTimeout(() => {
-      closeLoad();
-    }, 500);
+
   },
   methods: {
     save() {
@@ -117,7 +148,7 @@ export default {
      * @param row 点击这一列的数据
      */
     handleClick(row) {
-      this.$refs.dialog.openDialog()
+      this.$refs.dialog.openDialog();
     },
     /**
      * 接受子组件传过来的页数
@@ -184,6 +215,19 @@ export default {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+  }
+  .dialog{
+    .item{
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      span{
+        width: 80px;
+        text-align: right;
+        margin-right: 20px;
+      }
+
+    }
   }
 }
 </style>

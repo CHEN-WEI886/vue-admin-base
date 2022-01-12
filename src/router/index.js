@@ -8,6 +8,7 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
+import { openLoad, closeLoad } from "@/assets/commonJs/until.js";
 
 Vue.use(Router)
 
@@ -82,6 +83,10 @@ router.beforeEach((to, from, next) => {
     },1000)
   } else {
   }
+  openLoad();
+  setTimeout(() => {
+    closeLoad();
+  }, 500);
   next();
 });
 

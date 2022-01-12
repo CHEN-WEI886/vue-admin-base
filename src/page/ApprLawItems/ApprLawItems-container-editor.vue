@@ -9,16 +9,20 @@
         <el-input
           v-model="formInfor.name"
           placeholder="请输入房间号"
-          :disabled="true"
+          :disabled="isEdit"
         ></el-input>
       </div>
 
       <div class="downgroud">
         <div class="content-down">
           <label class="label-title">房间类型</label>
-          <el-select v-model="formInfor.type" disabled placeholder="请选择房间类型">
+          <el-select
+            v-model="formInfor.roomType"
+            :disabled="isEdit"
+            placeholder="请选择房间类型"
+          >
             <el-option
-              v-for="item in options"
+              v-for="item in roomTypeList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -29,39 +33,13 @@
 
         <div class="content-down">
           <label class="label-title">房间楼层</label>
-          <el-input
+          <el-select
             v-model="formInfor.num"
+            :disabled="isEdit"
             placeholder="请选择房间类型"
-            :disabled="true"
-          ></el-input>
-        </div>
-
-        <div class="content-down">
-          <label class="label-title">是否已清洁<span>*</span> </label>
-          <el-select
-            v-model="formInfor.department"
-            :disabled="type"
-            placeholder="请选择"
           >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </div>
-
-        <div class="content-down">
-          <label class="label-title">状态 <span>*</span> </label>
-          <el-select
-            v-model="formInfor.type"
-            :disabled="type"
-            placeholder="请选择"
-          >
-            <el-option
-              v-for="item in options"
+              v-for="item in roomFloorList"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -74,7 +52,6 @@
       <div class="title" ref="case" id="case">房间设施</div>
 
       <div class="title" ref="case1" id="case1">房间照片</div>
-
     </div>
 
     <!-- 后期抽出来作为组件 -->
@@ -96,8 +73,8 @@
     </div>
 
     <div class="footer">
-      <el-button type="primary">关闭</el-button>
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="goback()">关闭</el-button>
+      <el-button type="primary" v-if="!isEdit" @click="save">保存</el-button>
     </div>
   </div>
 </template>
@@ -106,85 +83,22 @@
 import {
   jump,
   openLoad,
+  closeLoad,
   initRightNav,
   changStyle,
 } from "../../assets/commonJs/until";
-import html2canvas from "html2canvas";
 export default {
   data() {
     return {
       caseDown: false, // 弹窗的建议下拉框状态
       activeDistance: "", //滚动条滚动的距离
-      lowTree: [
-        // 法律树数据
-        {
-          label: "一级 1",
-          children: [
-            {
-              label: "二级 1-1",
-              children: [
-                {
-                  label: "三级 1-1-1",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "一级 2",
-          children: [
-            {
-              label: "二级 2-1",
-              children: [
-                {
-                  label: "三级 2-1-1",
-                },
-              ],
-            },
-            {
-              label: "二级 2-2",
-              children: [
-                {
-                  label: "三级 2-2-1",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          label: "一级 3",
-          children: [
-            {
-              label: "二级 3-1",
-              children: [
-                {
-                  label: "三级 3-1-1",
-                },
-              ],
-            },
-            {
-              label: "二级 3-2",
-              children: [
-                {
-                  label: "三级 3-2-1",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-      defaultProps: {
-        // 默认打开的法律树节点
-        children: "children",
-        label: "label",
-      },
       rightNav: [
         //右边侧边栏的信息 ，多的时候可以封装起来
         { name: "基本信息", active: true, target: "infor", offsetTop: 0 },
         { name: "房间设施", active: false, target: "case", offsetTop: 0 },
         { name: "房间照片", active: false, target: "case1", offsetTop: 0 },
       ],
-      type: this.$router.query.type || 0,
+      isEdit: this.$route.query.type || 0,
       formInfor: {}, //传进来的数据
       options: [
         // 层级，部门下拉框统一，没有做过多操作
@@ -209,19 +123,45 @@ export default {
       lowSelection: [],
       type: "",
       setTime: "", //用于防抖
+      roomFloorList: [
+        // 下拉的列表
+        {
+          value: "1",
+          label: "2楼",
+        },
+        {
+          value: "2",
+          label: "3楼",
+        },
+        {
+          value: "3",
+          label: "4楼",
+        },
+      ],
+      roomTypeList: [
+        // 下拉的列表
+        {
+          value: "1",
+          label: "一房一厅",
+        },
+        {
+          value: "2",
+          label: "单间",
+        },
+      ],
     };
   },
   created() {
-    this.$route.query.type ? (this.type = false) : (this.type = true);
+    this.$route.query.type ? (this.isEdit = false) : (this.isEdit = true);
     this.formInfor = JSON.parse(this.$route.query.row);
     this.formInfor.hierarchy = [this.formInfor.hierarchy[0].label];
-    //打开加载框
-    openLoad();
   },
   mounted() {
     initRightNav(this.rightNav);
     this.esitChang();
-    window.addEventListener("scroll",() => {
+    window.addEventListener(
+      "scroll",
+      () => {
         clearTimeout(this.setTime);
         this.setTime = setTimeout(() => {
           this.esitChang();
@@ -231,6 +171,9 @@ export default {
     );
   },
   methods: {
+    save(){
+
+    },
     caseDownFun() {
       this.caseDown = !caseDown;
     },
@@ -241,7 +184,6 @@ export default {
     },
 
     esitChang() {
-      console.log(this.activeDistance)
       //判断滚动条滚动的距离是在数组的那个范围里
       this.activeDistance = this.$store.state.activeDistance;
       this.rightNav.forEach((item, index) => {
@@ -264,12 +206,7 @@ export default {
       // console.log(111,row)
     },
     goback() {
-      let i = 0
-      console.log(this.$route.name)
-      // this.$router.replace({name: this.$route.name, query: {type:  +i}});
-
-      // this.$router.go(-1);
-      // this.$router.push({ name:'redirect', query:{ type:'back' }});
+      this.$router.go(-1);
     },
 
     load() {

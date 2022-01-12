@@ -62,7 +62,7 @@ export default {
     this.changeActive();
     this.$router.replace({
       name: this.$router.name,
-      query: {...this.$router.query}
+      query: {...this.$route.query}
     })
   },
   methods: {

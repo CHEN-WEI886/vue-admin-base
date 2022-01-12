@@ -73,7 +73,7 @@
         <el-table-column prop="id" label="序号" width="80"> </el-table-column>
         <el-table-column prop="name" label="房间号" min-width="20%">
         </el-table-column>
-        <el-table-column prop="department" min-width="10%" label="房间类型">
+        <el-table-column prop="roomType" min-width="10%" label="房间类型">
         </el-table-column>
         <el-table-column prop="num" label="房间楼层" width="120">
         </el-table-column>
@@ -208,7 +208,7 @@ export default {
         {
           id: 1,
           name: "203",
-          department: "一房一厅",
+          roomType: "一房一厅",
           num: "2楼",
           hierarchy: [{ label: "是", value: 0 }],
           status: "1",
@@ -218,12 +218,6 @@ export default {
     };
   },
   created() {
-    //打开加载框
-    this.getInfor();
-    openLoad();
-    setTimeout(() => {
-      closeLoad();
-    }, 500);
   },
   methods: {
     async getInfor() {
@@ -242,8 +236,10 @@ export default {
       });
     },
     addShow() {
-      // 新增弹窗的出现
-      this.addshow = true;
+      this.$router.push({
+        name: "editor-noshowNav",
+        query: { type: 1 },
+      });
     },
     addHidden() {
       this.addshow = false;
